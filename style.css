@@ -1,64 +1,199 @@
-body{
-    margin:0;
-    padding:0;
-    font-family:'Times New Roman', Times, serif,sans-serif;
-    background:white;
+/* ==========================================================================
+
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* --- color tokens ------------------------------------------------- */
+  --soil:        #1F1A14;   /* page background */
+  --bark:        #2B2419;   /* card / surface background */
+  --bark-light:  #362D1F;   /* hover / raised surface */
+  --sand:        #EDE4D3;   /* primary text */
+  --sand-dim:    #A8977E;   /* muted / secondary text */
+  --moss:        #8A9A5B;   /* accent — success, primary actions */
+  --moss-dim:    #5E6B3E;
+  --ochre:       #C17F3E;   /* accent — highlight, warnings, focus */
+  --rust:        #A64B34;   /* accent — errors */
+  --border:      #4A3F2F;
+
+  /* --- type tokens ---------------------------------------------------- */
+  --font-display: 'Spectral', Georgia, serif;
+  --font-body:    'Work Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* --- layout tokens ---------------------------------------------------- */
+  --radius:  6px;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 3rem;
+  --max-w:   680px;
 }
 
-.container{
-    width:400px;
-    margin:60px auto;
-    background:#D3D3D3;
-    padding:25px;
-    border-radius:12px;
-    box-shadow:0 5px 15px rgba(0,0,0,0.15);
+/* --- reset / base ------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--soil);
+  color: var(--sand);
+  font-family: var(--font-body);
+  line-height: 1.5;
 }
 
-h1{
-    text-align:center;
+body {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at top left, rgba(138,154,91,0.06), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(193,127,62,0.06), transparent 55%);
 }
 
-label{
-    display:block;
-    margin-top:15px;
-    font-weight:bold;
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--sand);
+  margin: 0 0 var(--space-2);
+  letter-spacing: 0.01em;
 }
 
-input,
-select{
-    width:100%;
-    padding:10px;
-    margin-top:5px;
-    border-radius:6px;
-    border:1px solid #ccc;
-    box-sizing:border-box;
+h1 { font-size: 2rem; }
+h2 { font-size: 1.35rem; font-style: italic; font-weight: 400; color: var(--ochre); }
+
+p { color: var(--sand-dim); margin: 0 0 var(--space-2); }
+
+a { color: var(--ochre); }
+
+/* --- layout shell --------------------------------------------------- */
+.page {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-2);
 }
 
-.buttons{
-    display:flex;
-    gap:10px;
-    margin-top:20px;
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--moss);
+  border: 1px solid var(--moss-dim);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  margin-bottom: var(--space-2);
 }
 
-button{
-    flex:1;
-    padding:10px;
-    border:none;
-    border-radius:6px;
-    cursor:pointer;
-    background:#8B008B;
-    color:white;
+/* --- card / surface --------------------------------------------------- */
+.card {
+  background: var(--bark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
 }
 
-button:hover{
-    background:#FFF0F5;
+/* --- form elements --------------------------------------------------- */
+label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--sand-dim);
+  margin-bottom: 0.35rem;
 }
 
-.result{
-    margin-top:20px;
-    padding:15px;
-    background:#000000;
-    border-radius:8px;
-    text-align:center;
-    display:none;
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+  background: var(--soil);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--sand);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+  transition: border-color 0.15s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--ochre);
+  box-shadow: 0 0 0 3px rgba(193,127,62,0.18);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--soil);
+  background: var(--moss);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+button:hover  { background: #9DAF69; }
+button:active { transform: translateY(1px); }
+
+button.secondary {
+  background: transparent;
+  color: var(--sand-dim);
+  border: 1px solid var(--border);
+}
+
+button.secondary:hover {
+  background: var(--bark-light);
+  color: var(--sand);
+}
+
+/* --- result states --------------------------------------------------- */
+.result {
+  font-family: var(--font-mono);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  margin-top: var(--space-2);
+  border: 1px solid var(--border);
+  display: none;
+}
+
+.result.show { display: block; }
+
+.result.success {
+  border-color: var(--moss-dim);
+  background: rgba(138,154,91,0.08);
+  color: var(--moss);
+}
+
+.result.fail {
+  border-color: var(--rust);
+  background: rgba(166,75,52,0.08);
+  color: #D48B77;
+}
+
+/* --- footer / meta --------------------------------------------------- */
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--sand-dim);
+  text-align: center;
+  margin-top: var(--space-4);
+}
+
+/* --- utility --------------------------------------------------- */
+.center { text-align: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+
+@media (max-width: 480px) {
+  .field-row { grid-template-columns: 1fr; }
+  h1 { font-size: 1.6rem; }
 }
