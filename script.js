@@ -1,43 +1,63 @@
-function Pytha() {
-    // Get raw input values
-    const aVal = document.getElementById("a").value;
-    const bVal = document.getElementById("b").value;
-    const cVal = document.getElementById("c").value;
+function calculate(){
 
-    const resultElement = document.getElementById("result");
+    const p = Number(document.getElementById("p").value);
+    const r = Number(document.getElementById("r").value);
+    const t = Number(document.getElementById("t").value);
+    const type = document.getElementById("type").value;
 
-    const a = Number(aVal);
-    const b = Number(bVal);
-    const c = Number(cVal);
+    const result = document.getElementById("result");
 
-    
-
-    // Find the largest number (hypotenuse)
-    const max = Math.max(a, b, c);
-    let sumOfSquares;
-
-    // Check if c is the hypotenuse
-    if (max === c) {
-        sumOfSquares = a * a + b * b;
-    }
-    // Check if b is the hypotenuse
-    else if (max === b) {
-        sumOfSquares = a * a + c * c;
-    }
-    // Else, a must be the hypotenuse
-    else {
-        sumOfSquares = b * b + c * c;
+    // Validation
+    if(!p || !r || !t){
+        result.style.display = "block";
+        result.innerHTML = "⚠ Please fill all fields.";
+        return;
     }
 
-    // Compare sum of squares to hypotenuse squared
-    const isTriplet = (sumOfSquares === max * max);
-
-    // Display result using the template's result states
-    if (isTriplet) {
-        resultElement.textContent = `Yes! (${a}, ${b}, ${c}) is a Pythagorean triplet!`;
-        resultElement.className = "result show success";
-    } else {
-        resultElement.textContent = `No! (${a}, ${b}, ${c}) is NOT a Pythagorean triplet.`;
-        resultElement.className = "result show fail";
+    if(p <= 0 || r <= 0 || t <= 0){
+        result.style.display = "block";
+        result.innerHTML = "⚠ Values must be greater than zero.";
+        return;
     }
+
+    let interest;
+
+    if(type === "Simple Interest"){
+        interest = (p*r*t)/100;
+    }
+    else{
+        interest = p*Math.pow((1+r/100),t)-p;
+    }
+
+    const total = p + interest;
+
+    result.style.display="block";
+
+    result.innerHTML = `
+        <h3>Calculation Result</h3>
+
+        <p><b>Interest:</b> ₹${interest.toLocaleString("en-IN",{minimumFractionDigits:2})}</p>
+
+        <p><b>Total Amount:</b> ₹${total.toLocaleString("en-IN",{minimumFractionDigits:2})}</p>
+    `;
 }
+
+function resetFields(){
+
+    document.getElementById("p").value="";
+    document.getElementById("r").value="";
+    document.getElementById("t").value="";
+    document.getElementById("type").selectedIndex=0;
+
+    const result=document.getElementById("result");
+    result.style.display="none";
+    result.innerHTML="";
+}
+
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            calculate();
+        }
+    });
+});
