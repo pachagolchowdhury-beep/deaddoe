@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pythagorean Triplet Checker</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Kablammo&display=swap" rel="stylesheet">
+
+<style>
+/* ==========================================================================
+
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;0,600;1,400&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  /* --- color tokens ------------------------------------------------- */
+  --soil:        #1F1A14;   /* page background */
+  --bark:        #2B2419;   /* card / surface background */
+  --bark-light:  #362D1F;   /* hover / raised surface */
+  --sand:        #EDE4D3;   /* primary text */
+  --sand-dim:    #A8977E;   /* muted / secondary text */
+  --moss:        #8A9A5B;   /* accent — success, primary actions */
+  --moss-dim:    #5E6B3E;
+  --ochre:       #C17F3E;   /* accent — highlight, warnings, focus */
+  --rust:        #A64B34;   /* accent — errors */
+  --border:      #4A3F2F;
+
+  /* --- type tokens ---------------------------------------------------- */
+  --font-display: 'Spectral', Georgia, serif;
+  --font-body:    'Work Sans', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'Courier New', monospace;
+
+  /* --- layout tokens ---------------------------------------------------- */
+  --radius:  6px;
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 1.75rem;
+  --space-4: 3rem;
+  --max-w:   680px;
+}
+
+/* --- reset / base ------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--soil);
+  color: var(--sand);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+body {
+  min-height: 100vh;
+  background-image:
+    radial-gradient(ellipse at top left, rgba(138,154,91,0.06), transparent 55%),
+    radial-gradient(ellipse at bottom right, rgba(193,127,62,0.06), transparent 55%);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--sand);
+  margin: 0 0 var(--space-2);
+  letter-spacing: 0.01em;
+}
+
+h1 { font-size: 2rem; }
+h2 { font-size: 1.35rem; font-style: italic; font-weight: 400; color: var(--ochre); }
+
+p { color: var(--sand-dim); margin: 0 0 var(--space-2); }
+
+a { color: var(--ochre); }
+
+/* --- layout shell --------------------------------------------------- */
+.page {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: var(--space-4) var(--space-2);
+}
+
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--moss);
+  border: 1px solid var(--moss-dim);
+  border-radius: 999px;
+  padding: 0.2rem 0.7rem;
+  margin-bottom: var(--space-2);
+}
+
+/* --- card / surface --------------------------------------------------- */
+.card {
+  background: var(--bark);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+/* --- form elements --------------------------------------------------- */
+label {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--sand-dim);
+  margin-bottom: 0.35rem;
+}
+
+input[type="number"],
+input[type="text"] {
+  width: 100%;
+  background: var(--soil);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--sand);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  padding: 0.6rem 0.75rem;
+  transition: border-color 0.15s ease;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--ochre);
+  box-shadow: 0 0 0 3px rgba(193,127,62,0.18);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+}
+
+button {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--soil);
+  background: var(--moss);
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.7rem 1.4rem;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+button:hover  { background: #9DAF69; }
+button:active { transform: translateY(1px); }
+
+button.secondary {
+  background: transparent;
+  color: var(--sand-dim);
+  border: 1px solid var(--border);
+}
+
+button.secondary:hover {
+  background: var(--bark-light);
+  color: var(--sand);
+}
+
+/* --- result states --------------------------------------------------- */
+.result {
+  font-family: var(--font-mono);
+  border-radius: var(--radius);
+  padding: var(--space-2);
+  margin-top: var(--space-2);
+  border: 1px solid var(--border);
+  display: none;
+}
+
+.result.show { display: block; }
+
+.result.success {
+  border-color: var(--moss-dim);
+  background: rgba(138,154,91,0.08);
+  color: var(--moss);
+}
+
+.result.fail {
+  border-color: var(--rust);
+  background: rgba(166,75,52,0.08);
+  color: #D48B77;
+}
+
+/* --- footer / meta --------------------------------------------------- */
+.meta {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--sand-dim);
+  text-align: center;
+  margin-top: var(--space-4);
+}
+
+/* --- utility --------------------------------------------------- */
+.center { text-align: center; }
+.flex-between { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); }
+
+@media (max-width: 480px) {
+  .field-row { grid-template-columns: 1fr; }
+  h1 { font-size: 1.6rem; }
+}
+
+/* Kablammo just for the heading — everything else stays on the template */
+h1.kablammo {
+  font-family: "Kablammo", system-ui;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-variation-settings: "MORF" 0;
+}
+</style>
+</head>
+<body>
+  <div class="page">
+    <span class="eyebrow">spiced up my hs projects</span>
+    <h1 class="kablammo">Pythagorean Triplet Checker</h1>
+    <p>Enter three numbers (a, b, c):</p>
+
+    <div class="card">
+      <div class="field-row">
+        <div>
+          <label for="a">a</label>
+          <input type="number" id="a" placeholder="3">
+        </div>
+        <div>
+          <label for="b">b</label>
+          <input type="number" id="b" placeholder="4">
+        </div>
+        <div>
+          <label for="c">c</label>
+          <input type="number" id="c" placeholder="5">
+        </div>
+      </div>
+
+      <button onclick="Pytha()">Are they a triplet?</button>
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+  <script>
+function Pytha() {
+    // Get raw input values
+    const aVal = document.getElementById("a").value;
+    const bVal = document.getElementById("b").value;
+    const cVal = document.getElementById("c").value;
+
+    const resultElement = document.getElementById("result");
+
+    const a = Number(aVal);
+    const b = Number(bVal);
+    const c = Number(cVal);
+
+    
+
+    // Find the largest number (hypotenuse)
+    const max = Math.max(a, b, c);
+    let sumOfSquares;
+
+    // Check if c is the hypotenuse
+    if (max === c) {
+        sumOfSquares = a * a + b * b;
+    }
+    // Check if b is the hypotenuse
+    else if (max === b) {
+        sumOfSquares = a * a + c * c;
+    }
+    // Else, a must be the hypotenuse
+    else {
+        sumOfSquares = b * b + c * c;
+    }
+
+    // Compare sum of squares to hypotenuse squared
+    const isTriplet = (sumOfSquares === max * max);
+
+    // Display result using the template's result states
+    if (isTriplet) {
+        resultElement.textContent = `Yes! (${a}, ${b}, ${c}) is a Pythagorean triplet!`;
+        resultElement.className = "result show success";
+    } else {
+        resultElement.textContent = `No! (${a}, ${b}, ${c}) is NOT a Pythagorean triplet.`;
+        resultElement.className = "result show fail";
+    }
+}
+  </script>
+</body>
+</html>
