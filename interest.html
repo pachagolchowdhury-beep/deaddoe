@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interest Calculator</title>
+    <style>
+        body{
+            margin:0;
+            padding:0;
+            font-family:'Times New Roman', Times, serif,sans-serif;
+            background:white;
+        }
+
+        .container{
+            width:400px;
+            margin:60px auto;
+            background:#D3D3D3;
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.15);
+        }
+
+        h1{
+            text-align:center;
+        }
+
+        label{
+            display:block;
+            margin-top:15px;
+            font-weight:bold;
+        }
+
+        input,
+        select{
+            width:100%;
+            padding:10px;
+            margin-top:5px;
+            border-radius:6px;
+            border:1px solid #ccc;
+            box-sizing:border-box;
+        }
+
+        .buttons{
+            display:flex;
+            gap:10px;
+            margin-top:20px;
+        }
+
+        button{
+            flex:1;
+            padding:10px;
+            border:none;
+            border-radius:6px;
+            cursor:pointer;
+            background:#8B008B;
+            color:white;
+        }
+
+        button:hover{
+            background:#FFF0F5;
+        }
+
+        .result{
+            margin-top:20px;
+            padding:15px;
+            background:#DDA0DD;
+            border-radius:8px;
+            text-align:center;
+            display:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1> Interest Calculator</h1>
+
+    <label>Interest Type</label>
+    <select id="type">
+        <option>Simple Interest</option>
+        <option>Compound Interest</option>
+    </select>
+
+    <label>Principal Amount (₹)</label>
+    <input type="number" id="p" min="0" placeholder="Enter principal">
+
+    <label>Rate of Interest (%)</label>
+    <input type="number" id="r" min="0" step="0.01" placeholder="Enter rate">
+
+    <label>Time (Years)</label>
+    <input type="number" id="t" min="0" step="0.01" placeholder="Enter time">
+
+    <div class="buttons">
+        <button onclick="calculate()">Calculate</button>
+        <button onclick="resetFields()">Reset</button>
+    </div>
+
+    <div id="result" class="result"></div>
+
+</div>
+
+<script>
+function calculate(){
+
+    const p = Number(document.getElementById("p").value);
+    const r = Number(document.getElementById("r").value);
+    const t = Number(document.getElementById("t").value);
+    const type = document.getElementById("type").value;
+
+    const result = document.getElementById("result");
+
+    // Validation
+    if(!p || !r || !t){
+        result.style.display = "block";
+        result.innerHTML = "⚠ Please fill all fields.";
+        return;
+    }
+
+    if(p <= 0 || r <= 0 || t <= 0){
+        result.style.display = "block";
+        result.innerHTML = "⚠ Values must be greater than zero.";
+        return;
+    }
+
+    let interest;
+
+    if(type === "Simple Interest"){
+        interest = (p*r*t)/100;
+    }
+    else{
+        interest = p*Math.pow((1+r/100),t)-p;
+    }
+
+    const total = p + interest;
+
+    result.style.display="block";
+
+    result.innerHTML = `
+        <h3>Calculation Result</h3>
+
+        <p><b>Interest:</b> ₹${interest.toLocaleString("en-IN",{minimumFractionDigits:2})}</p>
+
+        <p><b>Total Amount:</b> ₹${total.toLocaleString("en-IN",{minimumFractionDigits:2})}</p>
+    `;
+}
+
+function resetFields(){
+
+    document.getElementById("p").value="";
+    document.getElementById("r").value="";
+    document.getElementById("t").value="";
+    document.getElementById("type").selectedIndex=0;
+
+    const result=document.getElementById("result");
+    result.style.display="none";
+    result.innerHTML="";
+}
+
+document.querySelectorAll("input").forEach(input => {
+    input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+            calculate();
+        }
+    });
+});
+</script>
+
+</body>
+</html>
